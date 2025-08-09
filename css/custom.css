@@ -64,12 +64,13 @@ html, body {
     0 4px 12px rgba(0,0,0,0.2);
 }
 
+/* 修改后的副标题样式 - 普通模式黑色，暗黑模式白色 */
 .cover-subtitle {
   font-size: 1.8rem;
   font-weight: 400;
   letter-spacing: 0.5px;
   line-height: 1.6;
-  color: rgba(0, 0, 0, 0.9);
+  color: rgba(0,0,0,0.8); /* 普通模式黑色 */
   max-width: 80%;
   margin: 0 auto;
   font-style: italic;
