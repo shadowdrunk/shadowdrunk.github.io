@@ -1,47 +1,178 @@
+/* ================= 全局基础样式 ================= */
+html, body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background: transparent !important;
+}
+
+/* ================= 背景容器样式 ================= */
 #web_bg {
-  background: center center / cover no-repeat fixed !important;
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: -1;
-  object-fit: cover;
+  width: 100vw;
+  height: 100vh;
+  z-index: -9999;
+  background-color: transparent !important;
+  background-size: cover !important;
+  background-position: center center !important;
+  background-repeat: no-repeat !important;
+  background-attachment: fixed !important;
+  pointer-events: none;
+  transition: background-image 1s ease-in-out;
+  transform: translateZ(0); /* 启用GPU加速 */
 }
 
-/* 遮罩 */
-/*
-#web_bg::after {
-  content: "";
+/* 加载时的背景遮罩（可选）
+#web_bg::before {
+  content: '';
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.3);
-  z-index: 0;
-}
-*/
+  background: linear-gradient(135deg, #6e8efb 0%, #a777e3 100%);
+  opacity: 0.3;
+  z-index: -1;
+  transition: opacity 1s ease;
+} */
 
-/* 移动端优化 */
-@media screen and (max-width: 768px) {
-  #web_bg {
-    background-attachment: scroll !important;
-    background-position: center top;
-  }
-  #web_bg::after {
-    background-color: rgba(0, 0, 0, 0.4);
-  }
+#web_bg.loaded::before {
+  opacity: 0;
 }
 
-
-/* 让页面主体内容在背景之上 */
-#content, .page-wrapper, .main {
+/* ================= 封面区块样式 ================= */
+#cover-block {
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  color: #fff;
   position: relative;
   z-index: 1;
+  text-shadow: 
+    0 2px 4px rgba(0,0,0,0.5),
+    0 0 10px rgba(0,0,0,0.3); /* 多重阴影增强可读性 */
 }
 
-/* 隐藏动态canvas背景 */
-#web_bg canvas {
-  display: none !important;
+/* 封面内容区域 */
+.cover-content {
+  max-width: 800px;
+  padding: 2rem;
+  border-radius: 15px;
+  animation: fadeIn 1.5s ease;
+}
+
+/* 封面标题 */
+.cover-title {
+  font-size: 2.5rem;
+  margin-bottom: 1.5rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+
+/* 滚动指示器 */
+.scroll-indicator {
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  animation: bounce 2s infinite;
+}
+
+/* ================= 文章卡片样式 ================= */
+.recent-post-item {
+  background: rgba(255,255,255,0.96) !important;
+  backdrop-filter: blur(8px);
+  border-radius: 12px;
+  box-shadow: 
+    0 4px 15px rgba(0,0,0,0.1),
+    0 0 0 1px rgba(0,0,0,0.02); /* 内边框效果 */
+  margin-bottom: 2rem;
+  padding: 2rem;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.1);
+  overflow: hidden;
+}
+
+/* 卡片悬停效果 */
+.recent-post-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 
+    0 8px 25px rgba(0,0,0,0.15),
+    0 0 0 1px rgba(0,0,0,0.03);
+}
+
+/* 卡片内部元素 */
+.post_cover, 
+.recent-post-info {
+  background: transparent !important;
+}
+
+/* ================= 动画效果 ================= */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% { transform: translateY(0) translateX(-50%); }
+  40% { transform: translateY(-20px) translateX(-50%); }
+  60% { transform: translateY(-10px) translateX(-50%); }
+}
+
+/* ================= 暗黑模式适配 ================= */
+@media (prefers-color-scheme: dark) {
+  .recent-post-item {
+    background: rgba(30,30,30,0.95) !important;
+    color: #f0f0f0;
+    box-shadow: 
+      0 4px 15px rgba(0,0,0,0.3),
+      0 0 0 1px rgba(255,255,255,0.05);
+  }
+  
+  .recent-post-item:hover {
+    box-shadow: 
+      0 8px 25px rgba(0,0,0,0.4),
+      0 0 0 1px rgba(255,255,255,0.08);
+  }
+}
+
+/* ================= 移动端优化 ================= */
+@media screen and (max-width: 768px) {
+  #cover-block {
+    height: 90vh;
+    padding: 0 1rem;
+  }
+  
+  .cover-title {
+    font-size: 2.5rem;
+  }
+  
+  .cover-content {
+    padding: 1.5rem;
+    width: 90%;
+  }
+  
+  .recent-post-item {
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    backdrop-filter: blur(5px);
+  }
+}
+
+/* ================= 打印样式优化 ================= */
+@media print {
+  #web_bg {
+    display: none;
+  }
+  .recent-post-item {
+    background: #fff !important;
+    box-shadow: none !important;
+    break-inside: avoid;
+  }
 }
