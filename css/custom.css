@@ -22,25 +22,7 @@ html, body {
   background-attachment: fixed !important;
   pointer-events: none;
   transition: background-image 1s ease-in-out;
-  transform: translateZ(0); /* 启用GPU加速 */
-}
-
-/* 加载时的背景遮罩（可选）
-#web_bg::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(135deg, #6e8efb 0%, #a777e3 100%);
-  opacity: 0.3;
-  z-index: -1;
-  transition: opacity 1s ease;
-} */
-
-#web_bg.loaded::before {
-  opacity: 0;
+  transform: translateZ(0);
 }
 
 /* ================= 封面区块样式 ================= */
@@ -55,12 +37,15 @@ html, body {
   color: #fff;
   position: relative;
   z-index: 1;
-  text-shadow: 
-    0 2px 4px rgba(0,0,0,0.5),
-    0 0 10px rgba(0,0,0,0.3); /* 多重阴影增强可读性 */
+  font-family: 
+    'PingFang SC', 
+    'HarmonyOS Sans SC',
+    'Microsoft YaHei',
+    sans-serif;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
 }
 
-/* 封面内容区域 */
 .cover-content {
   max-width: 800px;
   padding: 2rem;
@@ -68,21 +53,36 @@ html, body {
   animation: fadeIn 1.5s ease;
 }
 
-/* 封面标题 */
 .cover-title {
-  font-size: 2.5rem;
-  margin-bottom: 1.5rem;
+  font-size: 3.5rem;
+  margin-bottom: 1rem;
   font-weight: 700;
-  letter-spacing: 2px;
+  letter-spacing: 1px;
+  line-height: 1.2;
+  text-shadow: 
+    0 2px 4px rgba(0,0,0,0.3),
+    0 4px 12px rgba(0,0,0,0.2);
 }
 
-/* 滚动指示器 */
+.cover-subtitle {
+  font-size: 1.8rem;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+  line-height: 1.6;
+  color: rgba(0, 0, 0, 0.9);
+  max-width: 80%;
+  margin: 0 auto;
+  font-style: italic;
+}
+
 .scroll-indicator {
   position: absolute;
   bottom: 30px;
   left: 50%;
   transform: translateX(-50%);
   animation: bounce 2s infinite;
+  font-size: 1.5rem;
+  color: rgba(0, 0, 0, 0.8);
 }
 
 /* ================= 文章卡片样式 ================= */
@@ -92,14 +92,13 @@ html, body {
   border-radius: 12px;
   box-shadow: 
     0 4px 15px rgba(0,0,0,0.1),
-    0 0 0 1px rgba(0,0,0,0.02); /* 内边框效果 */
+    0 0 0 1px rgba(0,0,0,0.02);
   margin-bottom: 2rem;
   padding: 2rem;
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.1);
   overflow: hidden;
 }
 
-/* 卡片悬停效果 */
 .recent-post-item:hover {
   transform: translateY(-5px);
   box-shadow: 
@@ -107,7 +106,6 @@ html, body {
     0 0 0 1px rgba(0,0,0,0.03);
 }
 
-/* 卡片内部元素 */
 .post_cover, 
 .recent-post-info {
   background: transparent !important;
@@ -153,9 +151,14 @@ html, body {
     font-size: 2.5rem;
   }
   
+  .cover-subtitle {
+    font-size: 1.4rem;
+  }
+  
   .cover-content {
     padding: 1.5rem;
     width: 90%;
+    backdrop-filter: blur(5px);
   }
   
   .recent-post-item {

@@ -1,8 +1,3 @@
-/**
- * 随机背景切换功能 - custom.js版本
- * 每次页面刷新都会切换背景图片
- */
-
 // 等待DOM完全加载
 document.addEventListener('DOMContentLoaded', function() {
   // 背景图片数组 - 替换为您自己的图片URL
@@ -60,3 +55,30 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
 });
+
+// custom.js
+document.addEventListener('DOMContentLoaded', function() {
+  // 滚动箭头智能定位
+  function handleScroll() {
+    const coverBlock = document.getElementById('cover-block');
+    if (!coverBlock) return;
+
+    const coverHeight = coverBlock.offsetHeight;
+    if (window.pageYOffset > coverHeight * 0.3) {
+      document.body.classList.add('scrolled');
+    } else {
+      document.body.classList.remove('scrolled');
+    }
+  }
+
+  // 防抖处理
+  let isScrolling;
+  window.addEventListener('scroll', function() {
+    window.clearTimeout(isScrolling);
+    isScrolling = setTimeout(handleScroll, 50);
+  }, { passive: true });
+
+  // 初始化检查
+  handleScroll();
+});
+
