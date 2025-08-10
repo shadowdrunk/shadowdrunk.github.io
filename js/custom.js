@@ -59,4 +59,24 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 
+// 修复Pjax+懒加载的方案
+document.addEventListener('DOMContentLoaded', function() {
+  initLazyLoad();
+});
 
+document.addEventListener('pjax:complete', function() {
+  initLazyLoad();
+});
+
+function initLazyLoad() {
+  if(window.lazyLoadInstance) {
+    lazyLoadInstance.update();
+  } else {
+    window.lazyLoadInstance = new LazyLoad({
+      elements_selector: "img[data-src],iframe[data-src]",
+      callback_loaded: function(el) {
+        el.classList.add('lazyload-done');
+      }
+    });
+  }
+}
