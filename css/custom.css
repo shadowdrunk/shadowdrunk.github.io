@@ -51,6 +51,8 @@ html, body {
   padding: 2rem;
   border-radius: 15px;
   animation: fadeIn 1.5s ease;
+  /* background: rgba(0,0,0,0.3);
+  backdrop-filter: blur(5px); */
 }
 
 .cover-title {
@@ -64,13 +66,12 @@ html, body {
     0 4px 12px rgba(0,0,0,0.2);
 }
 
-/* 修改后的副标题样式 - 普通模式黑色，暗黑模式白色 */
 .cover-subtitle {
   font-size: 1.8rem;
   font-weight: 400;
   letter-spacing: 0.5px;
   line-height: 1.6;
-  color: rgba(0,0,0,0.8); /* 普通模式黑色 */
+  color: rgba(0,0,0,0.9);
   max-width: 80%;
   margin: 0 auto;
   font-style: italic;
@@ -83,28 +84,26 @@ html, body {
   transform: translateX(-50%);
   animation: bounce 2s infinite;
   font-size: 1.5rem;
-  color: rgba(0, 0, 0, 0.8);
+  color: rgba(255,255,255,0.8);
 }
 
 /* ================= 文章卡片样式 ================= */
 .recent-post-item {
-  background: rgba(255,255,255,0.96) !important;
+  background: rgba(255,255,255,0.96);
   backdrop-filter: blur(8px);
   border-radius: 12px;
-  box-shadow: 
-    0 4px 15px rgba(0,0,0,0.1),
-    0 0 0 1px rgba(0,0,0,0.02);
+  box-shadow: var(--anzhiyu-shadow-border);
   margin-bottom: 2rem;
   padding: 2rem;
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.1);
   overflow: hidden;
+  color: var(--anzhiyu-meta-theme-post-color);
+  border: var(--style-border);
 }
 
 .recent-post-item:hover {
   transform: translateY(-5px);
-  box-shadow: 
-    0 8px 25px rgba(0,0,0,0.15),
-    0 0 0 1px rgba(0,0,0,0.03);
+  box-shadow: var(--anzhiyu-shadow-theme);
 }
 
 .post_cover, 
@@ -125,19 +124,71 @@ html, body {
 }
 
 /* ================= 暗黑模式适配 ================= */
-@media (prefers-color-scheme: dark) {
-  .recent-post-item {
-    background: rgba(30,30,30,0.95) !important;
-    color: #f0f0f0;
-    box-shadow: 
-      0 4px 15px rgba(0,0,0,0.3),
-      0 0 0 1px rgba(255,255,255,0.05);
+[data-theme="dark"] {
+  /* 封面文字颜色修正 */
+  .cover-subtitle {
+    color: rgba(255,255,255,0.9) !important;
   }
   
+  .scroll-indicator {
+    color: rgba(255,255,255,0.8) !important;
+  }
+
+  /* 文章卡片适配 */
+  .recent-post-item {
+    background: var(--anzhiyu-card-bg) !important;
+    color: var(--anzhiyu-fontcolor) !important;
+    border: var(--style-border-always) !important;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3) !important;
+  }
+
   .recent-post-item:hover {
-    box-shadow: 
-      0 8px 25px rgba(0,0,0,0.4),
-      0 0 0 1px rgba(255,255,255,0.08);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.4) !important;
+  }
+
+  /* 确保内部元素颜色 */
+  .recent-post-item * {
+    color: var(--anzhiyu-fontcolor) !important;
+  }
+  
+  /* 新增：悬停时标题变黄效果 */
+  .recent-post-item:hover .recent-post-info .article-title,
+  .recent-post-item:hover .recent-post-info h2 {
+    color: var(--anzhiyu-lighttext) !important; /* 使用主题的黄色变量 */
+    transition: color 0.3s ease;
+    text-shadow: 0 0 5px rgba(242, 185, 75, 0.3); /* 可选：添加发光效果 */
+  }
+}
+
+/* 系统级暗黑模式适配 */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    /* 与上方[data-theme="dark"]相同的样式 */
+    .cover-subtitle {
+      color: rgba(255,255,255,0.9) !important;
+    }
+    
+    .scroll-indicator {
+      color: rgba(255,255,255,0.8) !important;
+    }
+
+    .recent-post-item {
+      background: var(--anzhiyu-card-bg) !important;
+      color: var(--anzhiyu-fontcolor) !important;
+      border: var(--style-border-always) !important;
+    }
+
+    .recent-post-item * {
+      color: var(--anzhiyu-fontcolor) !important;
+    }
+    
+    /* 悬停效果同步 */
+    .recent-post-item:hover .recent-post-info .article-title,
+    .recent-post-item:hover .recent-post-info h2 {
+      color: var(--anzhiyu-lighttext) !important;
+      transition: color 0.3s ease;
+      text-shadow: 0 0 5px rgba(242, 185, 75, 0.3);
+    }
   }
 }
 
@@ -159,7 +210,7 @@ html, body {
   .cover-content {
     padding: 1.5rem;
     width: 90%;
-    backdrop-filter: blur(5px);
+    /* backdrop-filter: blur(5px); */
   }
   
   .recent-post-item {
