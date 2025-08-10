@@ -2,8 +2,10 @@
 document.addEventListener('DOMContentLoaded', function() {
   // 背景图片数组 - 替换为您自己的图片URL
   const backgroundImages = [
-    "https://free.picui.cn/free/2025/08/07/6893bf0e5af10.jpg",
+    "https://free.picui.cn/free/2025/08/10/6898a93777e3d.jpg",
     "https://free.picui.cn/free/2025/08/07/6893bf0e5ec7b.jpg",
+    "https://free.picui.cn/free/2025/08/10/6898ae6d7b5ca.jpg",
+    "https://free.picui.cn/free/2025/08/10/6898af9cac44a.jpg",
     // 添加更多图片URL...
   ];
 
@@ -56,29 +58,5 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 });
 
-// custom.js
-document.addEventListener('DOMContentLoaded', function() {
-  // 滚动箭头智能定位
-  function handleScroll() {
-    const coverBlock = document.getElementById('cover-block');
-    if (!coverBlock) return;
 
-    const coverHeight = coverBlock.offsetHeight;
-    if (window.pageYOffset > coverHeight * 0.3) {
-      document.body.classList.add('scrolled');
-    } else {
-      document.body.classList.remove('scrolled');
-    }
-  }
-
-  // 防抖处理
-  let isScrolling;
-  window.addEventListener('scroll', function() {
-    window.clearTimeout(isScrolling);
-    isScrolling = setTimeout(handleScroll, 50);
-  }, { passive: true });
-
-  // 初始化检查
-  handleScroll();
-});
 
