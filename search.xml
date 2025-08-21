@@ -1,6 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>arc203_d D - Insert XOR题解</title>
+    <url>/2025/08/22/arc203-d-D-Insert-XOR%E9%A2%98%E8%A7%A3/</url>
+    <content><![CDATA[<h2 id="D-Insert-XOR"><a href="#D-Insert-XOR" class="headerlink" title="D - Insert XOR"></a><a href="https://atcoder.jp/contests/arc203/tasks/arc203_d"><strong>D - Insert XOR</strong></a></h2><h2 id="题目翻译"><a href="#题目翻译" class="headerlink" title="题目翻译"></a>题目翻译</h2><p>​	题目给我们一个长度为n的二进制字符串，我们要处理q次操作，每次操作给我们一个pos，我们会翻转s[pos]，我们每次操作后都要输出当前字符串的最小代价，操作是持久化的。一个二进制字符串的代价为需要的最小的初始字符串长度，使得我们可以通过对这个初始字符串进行若干次操作来得到当前字符串，我们可以进行的操作是选择两个相邻的字符元素，在其中间插入两个数异或的结果。</p>
+<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>​	我们考虑代价时从当前数组删减到最小的字符串长度来考虑会更容易，首先我们发现我们需要特判掉全部为1的情况，此时需要的初始字符串一定长度为n，然后剩余的情况我们可以进行的删减实际上就三种情况</p>
+<pre><code>	1. 11 -&gt; 1 (要求当前字符串中存在0）2. 000 -&gt; 00 （无要求）3. 101 -&gt; 1 (要求当前字符串除这个对还存在0
+</code></pre>
+<p>​    我们考虑吧维护每个元素对答案减小的贡献，则此时cur[i] &#x3D;&#x3D; 1 &amp;&amp; cur[i - 1] &#x3D;&#x3D; 1, 此时位置i贡献为1，cur[i] &#x3D;&#x3D; 0 &amp;&amp; cur[i + 1] &#x3D;&#x3D; 0 &amp;&amp; cur[i - 1] &#x3D;&#x3D; 0,此时位置i贡献为1，cur[i] &#x3D;&#x3D; 0 &amp;&amp; cur[i - 1] &#x3D;&#x3D; 1 &amp;&amp; cur[i + 1] &#x3D;&#x3D; 1,此时位置i的贡献为2，我们最后的答案就是n - 贡献和，注意答案为1时实际上要特判成2，因为我们不可能缩到1，再特判掉全1的情况即可，上面三种贡献实际上和三种删减情况一一对应。本题还有实现起来较为麻烦的线段树解法，我们直接用线段树维护区间的删减情况进行合并即可。</p>
+<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">solve</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="type">int</span> n;</span><br><span class="line">    std::cin &gt;&gt; n;</span><br><span class="line">    <span class="function">std::vector&lt;<span class="type">int</span>&gt; <span class="title">cur</span><span class="params">(n + <span class="number">2</span>, <span class="number">3</span>)</span></span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">1</span>; i &lt;= n; i++)</span><br><span class="line">        std::cin &gt;&gt; cur[i];</span><br><span class="line"></span><br><span class="line">    <span class="type">int</span> cnt1 = <span class="number">0</span>;</span><br><span class="line">    <span class="type">int</span> sum = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">1</span>; i &lt;= n; i++)&#123;</span><br><span class="line">        <span class="keyword">if</span>(cur[i] == <span class="number">1</span>)</span><br><span class="line">            cnt1 += <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">if</span>(cur[i] == <span class="number">1</span> &amp;&amp; cur[i - <span class="number">1</span>] == <span class="number">1</span>)</span><br><span class="line">            sum += <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">if</span>(cur[i] == <span class="number">0</span> &amp;&amp; cur[i - <span class="number">1</span>] == <span class="number">0</span> &amp;&amp; cur[i + <span class="number">1</span>] == <span class="number">0</span>)</span><br><span class="line">            sum += <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">if</span>(cur[i] == <span class="number">0</span> &amp;&amp; cur[i - <span class="number">1</span>] == <span class="number">1</span> &amp;&amp; cur[i + <span class="number">1</span>] == <span class="number">1</span>)</span><br><span class="line">            sum += <span class="number">2</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">auto</span> getans = [&amp;]()&#123;</span><br><span class="line">        <span class="keyword">if</span>(cnt1 == n)</span><br><span class="line">            <span class="keyword">return</span> n;</span><br><span class="line">        <span class="keyword">return</span> std::<span class="built_in">max</span>(<span class="number">2</span>, n - sum);</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">auto</span> del = [&amp;](<span class="type">int</span> pos)&#123;</span><br><span class="line">        <span class="keyword">if</span>(pos &lt; <span class="number">1</span> || pos &gt; n)</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        <span class="keyword">if</span>(cur[pos] == <span class="number">1</span>)</span><br><span class="line">            cnt1 -= <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">if</span>(cur[pos] == <span class="number">1</span> &amp;&amp; cur[pos - <span class="number">1</span>] == <span class="number">1</span>)</span><br><span class="line">            sum -= <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">if</span>(cur[pos] == <span class="number">0</span> &amp;&amp; cur[pos - <span class="number">1</span>] == <span class="number">0</span> &amp;&amp; cur[pos + <span class="number">1</span>] == <span class="number">0</span>)</span><br><span class="line">            sum -= <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">if</span>(cur[pos] == <span class="number">0</span> &amp;&amp; cur[pos - <span class="number">1</span>] == <span class="number">1</span> &amp;&amp; cur[pos + <span class="number">1</span>] == <span class="number">1</span>)</span><br><span class="line">            sum -= <span class="number">2</span>;</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">auto</span> add = [&amp;](<span class="type">int</span> pos)&#123;</span><br><span class="line">        <span class="keyword">if</span>(pos &lt; <span class="number">1</span> || pos &gt; n)</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        <span class="keyword">if</span>(cur[pos] == <span class="number">1</span>)</span><br><span class="line">            cnt1 += <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">if</span>(cur[pos] == <span class="number">1</span> &amp;&amp; cur[pos - <span class="number">1</span>] == <span class="number">1</span>)</span><br><span class="line">            sum += <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">if</span>(cur[pos] == <span class="number">0</span> &amp;&amp; cur[pos - <span class="number">1</span>] == <span class="number">0</span> &amp;&amp; cur[pos + <span class="number">1</span>] == <span class="number">0</span>)</span><br><span class="line">            sum += <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">if</span>(cur[pos] == <span class="number">0</span> &amp;&amp; cur[pos - <span class="number">1</span>] == <span class="number">1</span> &amp;&amp; cur[pos + <span class="number">1</span>] == <span class="number">1</span>)</span><br><span class="line">            sum += <span class="number">2</span>;</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="type">int</span> q;</span><br><span class="line">    std::cin &gt;&gt; q;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">1</span>; i &lt;= q; i++)&#123;</span><br><span class="line">        <span class="type">int</span> pos;</span><br><span class="line">        std::cin &gt;&gt; pos;</span><br><span class="line">        </span><br><span class="line">        <span class="built_in">del</span>(pos - <span class="number">1</span>);</span><br><span class="line">        <span class="built_in">del</span>(pos);</span><br><span class="line">        <span class="built_in">del</span>(pos + <span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">        cur[pos] ^= <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">        <span class="built_in">add</span>(pos - <span class="number">1</span>);</span><br><span class="line">        <span class="built_in">add</span>(pos);</span><br><span class="line">        <span class="built_in">add</span>(pos + <span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">        std::cout &lt;&lt; <span class="built_in">getans</span>() &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+]]></content>
+      <categories>
+        <category>算法竞赛题解</category>
+      </categories>
+      <tags>
+        <tag>题解</tag>
+        <tag>构造</tag>
+        <tag>atcoder2400</tag>
+        <tag>数据结构</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>CF1934 D2. XOR Break — Game Version题解</title>
+    <url>/2025/08/22/CF1934%20D2-XOR-Break-%E2%80%94-Game-Version%E9%A2%98%E8%A7%A3/</url>
+    <content><![CDATA[<h2 id="D2-XOR-Break-—-Game-Version"><a href="#D2-XOR-Break-—-Game-Version" class="headerlink" title="D2. XOR Break — Game Version"></a><a href="https://codeforces.com/problemset/problem/1934/D2">D2. XOR Break — Game Version</a></h2><h2 id="题目翻译"><a href="#题目翻译" class="headerlink" title="题目翻译"></a>题目翻译</h2><p>​	题目给我们一个初始数字n，我们要和对手进行博弈，我们可以选择先后手，我们与对手进行的游戏是这样的，当前数字初始为p，当前回合的选手需要构造两个数字p1，p2，满足（0 &lt; p1 &lt; p, 0 &lt; p2 &lt; p, p1 ^ p2 &#x3D;&#x3D; p)，若无法构造出p1，p2则当前回合玩家输，然后另一个人挑选其中任意一个数作为当前数字p，并开始它的回合。我们最多可以进行63次回合，需要保证必胜。初始数字n &lt; 1e18。交互题，系统给出对面的操作。</p>
+<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>​	首先我们可以发现一个关键的边界条件，当初始数字中为1的位为1时我们无法对其进行拆解，此时是必败态。我们考虑如何让对手到达这个状态或是这个状态由和转移过来。一个简单的必胜态是有两位数的情况，此时我们拆成两个1位为1的位的数则必胜。继续推广我们发现通过构造所有的为1的位为偶数时都是必胜态，奇数都是必败态，具体证明如下，对于一个偶数个位为1的数我们一定可以把其拆成两个为1的位为奇数的数，而对于为1的位为偶数的数我们无论怎么拆都是一奇数位为1，一个偶数位为1，所以我们只要继续挑选那个偶数位1的数进行拆分就可继续必胜。具体的拆分为了减少对面新增的1的位，我们直接把最高位1拆走，剩余的构成另外一个数即可，在题目要求下易证操作回合小于等于63。</p>
+<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="type">int</span> <span class="title">getcnt</span><span class="params">(ll x)</span></span>&#123;</span><br><span class="line">    <span class="type">int</span> ans = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">63</span>; i++)&#123;</span><br><span class="line">        <span class="keyword">if</span>((x &gt;&gt; i) &amp; <span class="number">1</span>)</span><br><span class="line">            ans += <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> ans;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">solve</span><span class="params">()</span></span>&#123;</span><br><span class="line">    ll n;</span><br><span class="line">    std::cin &gt;&gt; n;</span><br><span class="line">    <span class="type">int</span> cnt = <span class="built_in">getcnt</span>(n);</span><br><span class="line">    ll p1 = n;</span><br><span class="line">    ll p2 = n;</span><br><span class="line">    <span class="keyword">if</span>(cnt % <span class="number">2</span> == <span class="number">1</span>)&#123;</span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;second&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">        std::cin &gt;&gt; p1 &gt;&gt; p2;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span>&#123;</span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;first&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="type">int</span> op = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span>(<span class="literal">true</span>)&#123;</span><br><span class="line">        <span class="keyword">if</span>(p1 == <span class="number">0</span> &amp;&amp; p2 == <span class="number">0</span>)</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        op += <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">if</span>(<span class="built_in">getcnt</span>(p1) % <span class="number">2</span> != <span class="number">0</span>)</span><br><span class="line">            std::<span class="built_in">swap</span>(p1, p2);</span><br><span class="line">        ll out1 = (<span class="number">1LL</span> &lt;&lt; std::__lg(p1));</span><br><span class="line">        ll out2 = (p1 ^ out1);</span><br><span class="line"></span><br><span class="line">        std::cout &lt;&lt; out1 &lt;&lt; space &lt;&lt; out2 &lt;&lt; std::endl;</span><br><span class="line">        std::cin &gt;&gt; p1 &gt;&gt; p2;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+]]></content>
+      <categories>
+        <category>算法竞赛题解</category>
+      </categories>
+      <tags>
+        <tag>题解</tag>
+        <tag>cf2400</tag>
+        <tag>博弈论</tag>
+        <tag>位运算</tag>
+        <tag>构造</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>CF1981D D. Turtle and Multiplication 题解</title>
     <url>/2025/08/21/CF1981D-D-Turtle-and-Multiplication-%E9%A2%98%E8%A7%A3/</url>
     <content><![CDATA[<h2 id="D-Turtle-and-Multiplication"><a href="#D-Turtle-and-Multiplication" class="headerlink" title="D. Turtle and Multiplication"></a><a href="https://codeforces.com/contest/1981/problem/D">D. Turtle and Multiplication</a></h2><h2 id="题目翻译"><a href="#题目翻译" class="headerlink" title="题目翻译"></a>题目翻译</h2><p>​	题目给我们一个数字n，我们需要构造一个长度为n的数组，满足以下条件，数组中的所有元素属于[1, 3e5]，数组中没有两个相邻的元素的乘积相同，数组中不同的数的种类是长度为n下所有合法数组中最小的。输出任意一个符合条件的解。</p>
@@ -37,12 +79,12 @@
       </categories>
       <tags>
         <tag>题解</tag>
-        <tag>线段树</tag>
-        <tag>cf2700</tag>
+        <tag>图论</tag>
         <tag>组合数学</tag>
         <tag>模拟实现</tag>
         <tag>数据结构</tag>
-        <tag>图论</tag>
+        <tag>线段树</tag>
+        <tag>cf2700</tag>
         <tag>并查集</tag>
         <tag>卡特兰数</tag>
       </tags>
@@ -60,10 +102,10 @@
       </categories>
       <tags>
         <tag>题解</tag>
-        <tag>组合数学</tag>
-        <tag>模拟实现</tag>
         <tag>cf2400</tag>
         <tag>动态规划</tag>
+        <tag>组合数学</tag>
+        <tag>模拟实现</tag>
       </tags>
   </entry>
   <entry>
@@ -77,9 +119,9 @@
         <category>算法竞赛模板</category>
       </categories>
       <tags>
-        <tag>线段树</tag>
         <tag>数据结构</tag>
         <tag>模板</tag>
+        <tag>线段树</tag>
       </tags>
   </entry>
   <entry>
