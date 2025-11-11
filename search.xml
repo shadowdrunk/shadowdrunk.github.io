@@ -1,6 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>CF2163D2 D2. Diadrash (Hard Version)题解</title>
+    <url>/2025/11/11/CF2163D2-D2-Diadrash-Hard-Version-%E9%A2%98%E8%A7%A3/</url>
+    <content><![CDATA[<h2 id="D2-Diadrash-Hard-Version"><a href="#D2-Diadrash-Hard-Version" class="headerlink" title="D2. Diadrash (Hard Version)"></a><a href="https://codeforces.com/contest/2163/problem/D2">D2. Diadrash (Hard Version)</a></h2><h2 id="题目翻译"><a href="#题目翻译" class="headerlink" title="题目翻译"></a>题目翻译</h2><p>​	这是一道交互题，题目中有一个隐藏的排列，我们得到了q组询问，每组询问[l, r]，我们需要求出所有询问中MEX[l, r]最大的是多少，我们可以进行提问 ? l r，交互其会返回区间[l, r]的MEX。我们需要在30次询问内找出答案。排列长度n &lt;&#x3D; 1e4, 询问q &lt;&#x3D; 3e5。</p>
+<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>​	首先本题根据MEX的性质，我们不难发现所有被完全包含的区间都没有意义，所以我们对区间进行区去包含的处理，此时最多只会剩下n个区间询问。我们要解决hard版的30次询问还需要注意到MEX的另外一个重要性质，对于MEX[l, r] &#x3D; min(MEX[1, r], MEX[l, n])，这个性质的证明考虑第一个不在MEX[l, r]中的数位于其左侧或右侧就可以简单证明得到。</p>
+<p>​	我们对去重后的区间按左端点进行排序，我们可以对这些区间进行二分，因为去了包含之后的区间一定满足l[i] &lt; l[i + 1], r[i] &lt; r[i + 1]。对于我们当前验证的区间media，若其为[l, r],我们记a &#x3D; MEX[1, r], b &#x3D; MEX[l, n]，若a &lt; b，则我们只有考虑media区间右侧的区间即可，因为此时我们需要让r变大才有可能使得MEX[l, r]更大。若a &gt; b同理，所以我们可以二分缩小一半的可能（带来更大答案的区间只可能在一个半边），故解法成立，询问次数 $$2 * log_2 n $$ &lt;&#x3D; 30。</p>
+<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="type">int</span> <span class="title">ask</span><span class="params">(<span class="type">int</span> l, <span class="type">int</span> r)</span></span>&#123;</span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;? &quot;</span> &lt;&lt; l &lt;&lt; space &lt;&lt; r &lt;&lt; std::endl;</span><br><span class="line">    <span class="type">int</span> ans;</span><br><span class="line">    std::cin &gt;&gt; ans;</span><br><span class="line">    <span class="keyword">return</span> ans;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">solve</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="type">int</span> n, q;</span><br><span class="line">    std::cin &gt;&gt; n &gt;&gt; q;</span><br><span class="line">    <span class="type">int</span> mid = (n + <span class="number">1</span>) / <span class="number">2</span>;</span><br><span class="line">    <span class="function">std::vector&lt;<span class="type">int</span>&gt; <span class="title">lpos</span><span class="params">(n + <span class="number">1</span>, <span class="number">0</span>)</span></span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">1</span>; i &lt;= q; i++)&#123;</span><br><span class="line">        <span class="type">int</span> l, r;</span><br><span class="line">        std::cin &gt;&gt; l &gt;&gt; r;</span><br><span class="line">        lpos[l] = std::<span class="built_in">max</span>(lpos[l], r);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="type">int</span> r_get = <span class="number">0</span>;</span><br><span class="line">    std::vector&lt;std::pair&lt;<span class="type">int</span>, <span class="type">int</span>&gt;&gt; qu;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">1</span>; i &lt;= n; i++)&#123;</span><br><span class="line">        <span class="keyword">if</span>(lpos[i] &gt; r_get)&#123;</span><br><span class="line">            qu.<span class="built_in">push_back</span>(&#123;i, lpos[i]&#125;);</span><br><span class="line">            r_get = lpos[i];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="type">int</span> ans = <span class="number">0</span>;</span><br><span class="line">    <span class="type">int</span> left = <span class="number">0</span>;</span><br><span class="line">    <span class="type">int</span> right = qu.<span class="built_in">size</span>() - <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">while</span>(left &lt;= right)&#123;</span><br><span class="line">        <span class="type">int</span> media = (left + right) / <span class="number">2</span>;</span><br><span class="line">        <span class="type">int</span> l = qu[media].ff;</span><br><span class="line">        <span class="type">int</span> r = qu[media].ss;</span><br><span class="line">        <span class="type">int</span> a = <span class="built_in">ask</span>(<span class="number">1</span>, r);</span><br><span class="line">        <span class="type">int</span> b = <span class="built_in">ask</span>(l, n);</span><br><span class="line">        ans = std::<span class="built_in">max</span>(ans, std::<span class="built_in">min</span>(a, b));</span><br><span class="line">        <span class="keyword">if</span>(a &lt; b)&#123;</span><br><span class="line">            left = media + <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span>&#123;</span><br><span class="line">            right = media - <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;!&quot;</span> &lt;&lt; space &lt;&lt; ans &lt;&lt; std::endl;</span><br><span class="line">&#125;   </span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>算法竞赛题解</category>
+      </categories>
+      <tags>
+        <tag>题解</tag>
+        <tag>cf2500</tag>
+        <tag>交互</tag>
+        <tag>二分</tag>
+        <tag>MEX</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>CF1673F F. Anti-Theft Road Planning题解</title>
     <url>/2025/10/16/CF1673F-F-Anti-Theft-Road-Planning%E9%A2%98%E8%A7%A3/</url>
     <content><![CDATA[<h2 id="F-Anti-Theft-Road-Planning"><a href="#F-Anti-Theft-Road-Planning" class="headerlink" title="F. Anti-Theft Road Planning"></a><a href="https://codeforces.com/contest/1673/problem/F">F. Anti-Theft Road Planning</a></h2><h2 id="题目翻译"><a href="#题目翻译" class="headerlink" title="题目翻译"></a>题目翻译</h2><p>​	题目给我们一个n * n的矩阵，矩阵中的每个格子都是四联通的，有个小偷初始位于（0，0）要在这个矩阵中偷盗，我们有报警器，小偷每次经过报警器的数值都会异或上小偷经过的路径的长度，报警器的初始数值为0。当小偷进行盗窃时报警器会告诉我们数值并且将报警器数值重置为0，我们需要根据这个数值输出小偷具体的坐标。我们需要构造每个格子之间的距离，输出构造方案并完成交互，格子距离的和不可以超过48000。</p>
@@ -15,9 +35,9 @@
       </categories>
       <tags>
         <tag>题解</tag>
+        <tag>构造</tag>
         <tag>状态压缩</tag>
         <tag>cf2400</tag>
-        <tag>构造</tag>
         <tag>交互</tag>
         <tag>格雷码</tag>
         <tag>贪心</tag>
@@ -39,8 +59,8 @@
       </categories>
       <tags>
         <tag>题解</tag>
-        <tag>贪心</tag>
         <tag>动态规划</tag>
+        <tag>贪心</tag>
         <tag>cf2600</tag>
         <tag>单调队列</tag>
         <tag>反悔贪心</tag>
@@ -80,9 +100,9 @@
       </categories>
       <tags>
         <tag>题解</tag>
-        <tag>cf2400</tag>
         <tag>哈希</tag>
         <tag>动态规划</tag>
+        <tag>cf2400</tag>
         <tag>换根dp</tag>
       </tags>
   </entry>
@@ -122,8 +142,8 @@
       </categories>
       <tags>
         <tag>题解</tag>
-        <tag>动态规划</tag>
         <tag>数据结构</tag>
+        <tag>动态规划</tag>
         <tag>组合数学</tag>
         <tag>cf1900</tag>
       </tags>
@@ -143,9 +163,9 @@
       </categories>
       <tags>
         <tag>题解</tag>
-        <tag>cf2500</tag>
         <tag>数据结构</tag>
         <tag>模拟实现</tag>
+        <tag>cf2500</tag>
         <tag>平衡树</tag>
       </tags>
   </entry>
@@ -187,13 +207,13 @@
       <tags>
         <tag>题解</tag>
         <tag>构造</tag>
-        <tag>哈希</tag>
         <tag>区域赛</tag>
         <tag>2024昆明区域赛</tag>
         <tag>金牌题</tag>
         <tag>数据结构</tag>
         <tag>线段树</tag>
         <tag>模拟实现</tag>
+        <tag>哈希</tag>
       </tags>
   </entry>
   <entry>
@@ -210,10 +230,10 @@
       </categories>
       <tags>
         <tag>题解</tag>
-        <tag>cf2400</tag>
-        <tag>贪心</tag>
         <tag>数据结构</tag>
         <tag>线段树</tag>
+        <tag>cf2400</tag>
+        <tag>贪心</tag>
       </tags>
   </entry>
   <entry>
@@ -229,10 +249,10 @@
       </categories>
       <tags>
         <tag>题解</tag>
-        <tag>cf2400</tag>
         <tag>构造</tag>
         <tag>数据结构</tag>
         <tag>模拟实现</tag>
+        <tag>cf2400</tag>
         <tag>计算几何</tag>
       </tags>
   </entry>
@@ -272,8 +292,8 @@
       </categories>
       <tags>
         <tag>题解</tag>
-        <tag>cf2400</tag>
         <tag>构造</tag>
+        <tag>cf2400</tag>
         <tag>博弈论</tag>
         <tag>位运算</tag>
       </tags>
@@ -338,9 +358,9 @@
       </categories>
       <tags>
         <tag>题解</tag>
-        <tag>cf2400</tag>
-        <tag>动态规划</tag>
         <tag>模拟实现</tag>
+        <tag>动态规划</tag>
+        <tag>cf2400</tag>
         <tag>组合数学</tag>
       </tags>
   </entry>
@@ -374,8 +394,8 @@
       </categories>
       <tags>
         <tag>题解</tag>
-        <tag>cf2400</tag>
         <tag>构造</tag>
+        <tag>cf2400</tag>
       </tags>
   </entry>
 </search>
