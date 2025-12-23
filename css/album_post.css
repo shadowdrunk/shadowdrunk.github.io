@@ -1,0 +1,53 @@
+#album-post {
+  /* 布局 */
+  margin-top: 2.5rem !important;
+
+  /* 外观 - 复刻博文“底框”样式 */
+  border-radius: 12px !important;
+  overflow: hidden !important;
+  box-shadow: var(--card-box-shadow, 0 8px 16px -4px rgba(0, 0, 0, 0.1)) !important;
+  background: var(--card-bg, #fff) !important;
+  border: 1px solid var(--card-border-color, #f0f0f0) !important;
+}
+
+/* 内容区域样式，完全复刻 .post-content */
+.album-post-content {
+  padding: 2rem;
+  color: var(--text-color); /* 文字颜色 */
+  font-size: 1rem; /* 字体大小 */
+  line-height: 1.8; /* 行高 */
+}
+
+/* 确保内部的Markdown元素样式正确 */
+.album-post-content h1,
+.album-post-content h2,
+.album-post-content h3,
+.album-post-content h4 {
+  margin-top: 1.8em;
+  margin-bottom: 0.8em;
+  border-bottom: 1px solid var(--hr-border-color);
+  padding-bottom: 0.3em;
+  color: var(--text-color);
+}
+
+.album-post-content a {
+  color: var(--link-color);
+  text-decoration: none;
+}
+
+.album-post-content a:hover {
+  color: var(--link-hover-color);
+  text-decoration: underline;
+}
+
+.album-post-content code {
+  background: var(--inline-code-bg);
+  padding: 0.2em 0.4em;
+  border-radius: 3px;
+  font-family: var(--font-family-code);
+}
+
+.album-post-content pre code {
+  background: transparent;
+  padding: 0;
+}
