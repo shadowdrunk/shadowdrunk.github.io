@@ -266,9 +266,9 @@
       </categories>
       <tags>
         <tag>题解</tag>
+        <tag>构造</tag>
         <tag>状态压缩</tag>
         <tag>cf2400</tag>
-        <tag>构造</tag>
         <tag>交互</tag>
         <tag>格雷码</tag>
         <tag>贪心</tag>
@@ -291,8 +291,8 @@
       <tags>
         <tag>题解</tag>
         <tag>贪心</tag>
-        <tag>动态规划</tag>
         <tag>cf2600</tag>
+        <tag>动态规划</tag>
         <tag>单调队列</tag>
         <tag>反悔贪心</tag>
       </tags>
@@ -331,8 +331,8 @@
       </categories>
       <tags>
         <tag>题解</tag>
-        <tag>cf2400</tag>
         <tag>哈希</tag>
+        <tag>cf2400</tag>
         <tag>动态规划</tag>
         <tag>换根dp</tag>
       </tags>
@@ -481,9 +481,9 @@
       <tags>
         <tag>数据结构</tag>
         <tag>题解</tag>
-        <tag>cf2400</tag>
         <tag>构造</tag>
         <tag>模拟实现</tag>
+        <tag>cf2400</tag>
         <tag>计算几何</tag>
       </tags>
   </entry>
@@ -523,8 +523,8 @@
       </categories>
       <tags>
         <tag>题解</tag>
-        <tag>cf2400</tag>
         <tag>构造</tag>
+        <tag>cf2400</tag>
         <tag>博弈论</tag>
         <tag>位运算</tag>
       </tags>
@@ -589,8 +589,8 @@
       </categories>
       <tags>
         <tag>题解</tag>
-        <tag>cf2400</tag>
         <tag>模拟实现</tag>
+        <tag>cf2400</tag>
         <tag>动态规划</tag>
         <tag>组合数学</tag>
       </tags>
@@ -625,8 +625,8 @@
       </categories>
       <tags>
         <tag>题解</tag>
-        <tag>cf2400</tag>
         <tag>构造</tag>
+        <tag>cf2400</tag>
       </tags>
   </entry>
 </search>
