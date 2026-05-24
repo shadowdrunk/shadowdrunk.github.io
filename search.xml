@@ -245,8 +245,8 @@
       </categories>
       <tags>
         <tag>题解</tag>
-        <tag>交互</tag>
         <tag>cf2500</tag>
+        <tag>交互</tag>
         <tag>二分</tag>
         <tag>MEX</tag>
       </tags>
@@ -267,8 +267,8 @@
       <tags>
         <tag>题解</tag>
         <tag>构造</tag>
-        <tag>状态压缩</tag>
         <tag>cf2400</tag>
+        <tag>状态压缩</tag>
         <tag>交互</tag>
         <tag>格雷码</tag>
         <tag>贪心</tag>
@@ -290,9 +290,9 @@
       </categories>
       <tags>
         <tag>题解</tag>
-        <tag>贪心</tag>
         <tag>cf2600</tag>
         <tag>动态规划</tag>
+        <tag>贪心</tag>
         <tag>单调队列</tag>
         <tag>反悔贪心</tag>
       </tags>

@@ -20056,16 +20056,19 @@ body[data-type="album_detail"] #page .author-content-item .card-content .banner-
 }
 
 /* 处理单页背景 */
-body[data-type="album"] #web_bg {
+body[data-type="album"] #web_bg,
+body[data-type="album2"] #web_bg {
   background: var(--anzhiyu-background);
 }
-body[data-type="album"] #page {
+body[data-type="album"] #page,
+body[data-type="album2"] #page {
   border: 0;
   box-shadow: none !important;
   padding: 0 !important;
   background: 0 0 !important;
 }
-body[data-type="album"] #page .page-title {
+body[data-type="album"] #page .page-title,
+body[data-type="album2"] #page .page-title {
   display: none;
 }
 
