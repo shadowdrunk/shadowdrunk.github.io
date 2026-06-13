@@ -1,0 +1,3 @@
+.cover-typewriter { white-space: nowrap; display: inline-block; }
+.cover-typewriter.cursor-blink { border-right: .12em solid rgba(255,255,255,0.85); animation: blink 1s steps(1) infinite; }
+@keyframes blink { 50% { border-color: transparent; } }
